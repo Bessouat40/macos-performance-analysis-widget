@@ -1,22 +1,12 @@
 
 import psutil
+import rumps
 
-psutil.cpu_times()
+memory = psutil.virtual_memory()
+print('memory : ', memory)
+print('memory : ', [mem / 1024 ** 3 for mem in memory])
 
-for x in range(3):
-    print(psutil.cpu_percent(interval=1))
-
-for x in range(3):
-    print(psutil.cpu_percent(interval=1, percpu=True))
-
-for x in range(3):
-    print(psutil.cpu_times_percent(interval=1, percpu=False))
-
-print(psutil.cpu_count())
-print(psutil.cpu_count(logical=False))
-
-print(psutil.cpu_stats())
-
-print(psutil.cpu_freq())
-
-print(psutil.getloadavg())
+@rumps.timer(2)
+def update_stats(self, _):
+    memory = psutil.virtual_memory()
+    self.menu["Memory Usage"].title = f"Memory Usage: {memory.percent}% (Used: {memory.used / (1024**3):.2f} GB, Free: {memory.free / (1024**3):.2f} GB)"
